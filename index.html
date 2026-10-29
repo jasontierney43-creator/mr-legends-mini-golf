@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mr. Legends Mini Golf</title>
+<meta name="description" content="Mr. Legends Mini Golf: free mini golf for the AtGames Legends Pinball 4KP and HDP. Four 18-hole courses, 1-4 players, plunger putting.">
+<meta property="og:title" content="Mr. Legends Mini Golf">
+<meta property="og:description" content="Free mini golf for the AtGames Legends Pinball 4KP and HDP, by Mr. Legends Game Studios.">
+<meta property="og:image" content="https://jasontierney43.github.io/mr-legends-mini-golf/img/hole-in-one.webp">
+<meta property="og:url" content="https://jasontierney43.github.io/mr-legends-mini-golf/">
+<link rel="icon" href="img/icon.png">
+<style>
+@font-face{font-family:"Lilita One";src:url(fonts/lilita-one.woff2) format("woff2");font-display:swap}
+@font-face{font-family:"Inter";src:url(fonts/inter-400.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Inter";src:url(fonts/inter-600.woff2) format("woff2");font-weight:600;font-display:swap}
+@font-face{font-family:"Inter";src:url(fonts/inter-800.woff2) format("woff2");font-weight:800;font-display:swap}
+:root{
+  --felt:#123d2a; --felt-2:#16492f; --felt-deep:#0b2a1c; --ink:#f3f7f1; --muted:#b9cdbf;
+  --gold:#f5c542; --gold-deep:#d99a1e; --flag:#ef4f3f; --line:rgba(255,255,255,.12);
+  --card:#0f3323; --white:#ffffff; --todo:#ffb020;
+  --display:"Lilita One","Arial Black",system-ui,sans-serif;
+  --body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--felt-deep);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6}
+img{max-width:100%;display:block}
+a{color:var(--gold)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.stripes{background:repeating-linear-gradient(180deg,var(--felt) 0 44px,var(--felt-2) 44px 88px)}
+
+/* nav */
+nav{position:sticky;top:0;z-index:10;background:rgba(11,42,28,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:22px;height:60px}
+.brand{font-family:var(--display);font-size:22px;color:var(--gold);text-decoration:none;letter-spacing:.5px;margin-right:auto;white-space:nowrap}
+nav .links a{color:var(--ink);text-decoration:none;font-weight:600;font-size:15px;margin-left:18px}
+nav .links a:hover{color:var(--gold)}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:800;text-decoration:none;border-radius:999px;padding:14px 26px;font-size:17px;border:0;cursor:pointer}
+.btn-gold{background:linear-gradient(180deg,var(--gold),var(--gold-deep));color:#2a1b00;box-shadow:0 4px 0 #9c6a0c,0 10px 24px rgba(0,0,0,.35)}
+.btn-gold:hover{filter:brightness(1.06)}
+.btn-ghost{background:transparent;color:var(--ink);border:2px solid rgba(255,255,255,.35)}
+.btn-sm{padding:8px 16px;font-size:14px;box-shadow:0 3px 0 #9c6a0c}
+
+/* hero */
+.hero{padding:64px 0 72px;position:relative;overflow:hidden}
+html,body{overflow-x:hidden}
+.hero .wrap{display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center}
+.tag{display:inline-block;font-weight:800;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--felt-deep);background:var(--gold);border-radius:6px;padding:4px 10px}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(46px,7vw,84px);line-height:.95;margin:18px 0 6px;color:var(--gold);text-shadow:0 4px 0 #8a5d08,0 10px 30px rgba(0,0,0,.4)}
+h1 small{display:block;font-size:.42em;color:var(--white);letter-spacing:6px;text-shadow:none;margin-top:12px}
+.lede{font-size:20px;color:var(--ink);max-width:520px;margin:22px 0 28px}
+.cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.fine{color:var(--muted);font-size:14px;margin-top:14px}
+.cab{position:relative}
+.dmd{background:#050806;border-radius:14px;padding:12px;border:3px solid #2b3a31;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+.dmd img{border-radius:6px;aspect-ratio:16/9;object-fit:cover;width:100%}
+.dmd-label{position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);background:var(--felt-deep);border:1px solid var(--line);border-radius:999px;font-size:12px;font-weight:600;color:var(--muted);padding:4px 12px;white-space:nowrap}
+.ball{position:absolute;width:64px;height:64px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#e6e6e6 55%,#bdbdbd);box-shadow:0 8px 18px rgba(0,0,0,.45);right:-18px;top:-22px}
+.ball:after{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,rgba(0,0,0,.08) 2px,transparent 2.5px) 0 0/9px 9px}
+
+section{padding:76px 0}
+h2{font-family:var(--display);font-weight:400;font-size:clamp(34px,4.6vw,50px);line-height:1.05;margin:0 0 10px;color:var(--white)}
+h2 em{font-style:normal;color:var(--gold)}
+.sub{color:var(--muted);font-size:18px;margin:0 0 36px;max-width:640px}
+
+/* features */
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.feat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+.feat h3{margin:0 0 6px;font-size:19px;color:var(--gold)}
+.feat p{margin:0;color:var(--muted);font-size:16px}
+.ico{width:42px;height:42px;border-radius:12px;background:rgba(245,197,66,.14);display:grid;place-items:center;margin-bottom:14px}
+.ico svg{width:24px;height:24px;stroke:var(--gold);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* courses */
+.courses{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+.course{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:grid;grid-template-columns:190px 1fr;align-items:center}
+.course .shot{background:#050806;padding:8px;height:100%;display:flex;align-items:center}
+.course .shot img{border-radius:6px;aspect-ratio:9/16;width:100%;object-fit:cover}
+.course .body{padding:20px 24px}
+.course h3{font-family:var(--display);font-weight:400;font-size:30px;margin:0;color:var(--white)}
+.course .meta{font-weight:800;font-size:13px;letter-spacing:1.5px;color:var(--gold);text-transform:uppercase}
+.course p{margin:8px 0 0;color:var(--muted)}
+.todo-pill{display:inline-block;background:var(--todo);color:#2b1a00;font-weight:800;font-size:11px;letter-spacing:1.2px;border-radius:4px;padding:2px 7px;margin-bottom:8px}
+
+/* DMD strip */
+.strip{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.strip figure{margin:0;background:#050806;border-radius:12px;padding:7px;border:2px solid #24342b}
+.strip img{border-radius:6px;aspect-ratio:16/9;object-fit:cover;width:100%}
+
+/* install */
+.install{background:var(--felt)}
+.steps{display:grid;gap:22px;counter-reset:s}
+.step{display:grid;grid-template-columns:72px 1fr 1.1fr;gap:24px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px}
+.num{width:60px;height:60px;border-radius:50%;background:var(--gold);color:var(--felt-deep);font-family:var(--display);font-size:32px;display:grid;place-items:center;box-shadow:0 4px 0 #9c6a0c}
+.step h3{margin:0 0 6px;font-size:22px}
+.step p{margin:0;color:var(--muted)}
+.step kbd{font-family:var(--body);font-weight:700;background:#fff;color:#111;border-radius:5px;padding:1px 7px;font-size:15px;white-space:nowrap}
+.note{margin-top:22px;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:14px;padding:16px 20px;color:var(--muted);font-size:15.5px}
+.note b{color:var(--ink)}
+
+/* Windows illustration kit (illustrations, not real screenshots) */
+.win{background:#f3f3f3;color:#1b1b1b;border-radius:10px;box-shadow:0 12px 30px rgba(0,0,0,.4);font-family:"Segoe UI",var(--body);font-size:13px;overflow:hidden;border:1px solid #cfcfcf}
+.win .bar{background:#fff;height:32px;display:flex;align-items:center;padding:0 12px;gap:8px;border-bottom:1px solid #e2e2e2;font-size:12px;color:#333}
+.win .bar .dots{margin-left:auto;display:flex;gap:14px;color:#555;letter-spacing:2px}
+.win .pad{padding:14px}
+.crumb{background:#fff;border:1px solid #d6d6d6;border-radius:4px;padding:5px 9px;margin-bottom:10px;color:#333}
+.file{display:flex;align-items:center;gap:9px;padding:6px 8px;border-radius:4px}
+.file.sel{background:#cce4f7;outline:1px solid #99c9ef}
+.zipico{width:22px;height:26px;background:linear-gradient(90deg,#f6c94a 0 40%,#e2b030 40% 60%,#f6c94a 60%);border-radius:2px;position:relative}
+.zipico:after{content:"";position:absolute;left:9px;top:3px;width:4px;height:16px;background:repeating-linear-gradient(180deg,#555 0 2px,transparent 2px 4px)}
+.fold{width:26px;height:20px;background:#f8d775;border-radius:2px 2px 3px 3px;position:relative;box-shadow:inset 0 -6px 0 #f1c24b}
+.fold:before{content:"";position:absolute;left:0;top:-4px;width:11px;height:5px;background:#f1c24b;border-radius:2px 2px 0 0}
+.menu{position:absolute;background:#fff;border:1px solid #d0d0d0;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.25);padding:5px;width:180px}
+.menu div{padding:6px 10px;border-radius:4px;color:#222}
+.menu .hi{background:#e5f1fb;outline:1px solid #99c9ef;font-weight:700}
+.menu hr{border:0;border-top:1px solid #e5e5e5;margin:4px 0}
+.dlg h4{margin:0 0 10px;font-size:15px;font-weight:600;color:#1f3c88}
+.field{display:flex;gap:8px;align-items:center;margin:6px 0 12px}
+.field .in{flex:1;background:#fff;border:2px solid #0067c0;border-radius:4px;padding:5px 8px;font-weight:700}
+.wbtn{background:#fdfdfd;border:1px solid #bbb;border-radius:4px;padding:5px 14px;font-size:12px}
+.wbtn.pri{background:#0067c0;color:#fff;border-color:#0067c0}
+.ring{outline:3px solid var(--flag);outline-offset:2px;border-radius:5px}
+.illus-cap{font-size:12px;color:var(--muted);margin-top:8px;text-align:center}
+.dl-mock{display:flex;justify-content:center;padding:26px 0}
+
+/* controls */
+table.ctl{width:100%;border-collapse:collapse;background:var(--card);border-radius:16px;overflow:hidden;border:1px solid var(--line)}
+.ctl td{padding:14px 20px;border-bottom:1px solid var(--line);vertical-align:top}
+.ctl tr:last-child td{border-bottom:0}
+.ctl td:first-child{font-weight:800;color:var(--gold);width:38%}
+.ctl td:last-child{color:var(--ink)}
+
+/* support */
+.support .box{display:grid;grid-template-columns:1.4fr 1fr;gap:36px;align-items:center;background:linear-gradient(135deg,#174f34,#0f3323);border:1px solid var(--line);border-radius:22px;padding:38px}
+.qr{background:#fff;border-radius:16px;padding:14px;width:220px;margin-left:auto}
+.qr small{display:block;text-align:center;color:#234;font-weight:600;font-size:13px;margin-top:4px}
+.venmo{background:#008cff;color:#fff;box-shadow:0 4px 0 #0062b3,0 10px 24px rgba(0,0,0,.3)}
+
+footer{border-top:1px solid var(--line);padding:46px 0 60px;color:var(--muted);font-size:15px}
+footer .grid{display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center}
+footer img{width:260px;border-radius:10px;border:1px solid var(--line)}
+footer b{color:var(--ink)}
+.todo-box{outline:2px dashed var(--todo);outline-offset:4px;border-radius:6px}
+
+@media (max-width:860px){
+  nav .links{display:none}
+  .hero .wrap{grid-template-columns:1fr;gap:40px}
+  .features{grid-template-columns:1fr}
+  .courses{grid-template-columns:1fr}
+  .course{grid-template-columns:130px 1fr}
+  .course .body{padding:16px 18px}
+  .course h3{font-size:25px}
+  .strip{grid-template-columns:repeat(2,1fr)}
+  .step{grid-template-columns:1fr;gap:14px}
+  .support .box{grid-template-columns:1fr;padding:26px}
+  .qr{margin:0 auto}
+  footer .grid{grid-template-columns:1fr}
+  .ball{width:46px;height:46px;right:-6px;top:-16px}
+  section{padding:56px 0}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#">MR. LEGENDS MINI GOLF</a>
+    <div class="links"><a href="#courses">Courses</a><a href="#install">Install</a><a href="#controls">Controls</a><a href="#support">Support</a></div>
+    <a class="btn btn-gold btn-sm" href="https://github.com/jasontierney43/mr-legends-mini-golf/releases/download/r1/MrLegendsMiniGolf-r1.zip">Download</a>
+  </div>
+</nav>
+
+<header class="hero stripes" id="download">
+  <div class="wrap">
+    <div>
+      <span class="tag">Free · AtGames Legends 4KP &amp; HDP</span>
+      <h1>Mr. Legends<small>MINI GOLF</small></h1>
+      <p class="lede">Four themed 18-hole courses, 1 to 4 players, and a real plunger putt. Built to run on your Legends Pinball cabinet straight from a USB stick.</p>
+      <div class="cta">
+        <a class="btn btn-gold" href="https://github.com/jasontierney43/mr-legends-mini-golf/releases/download/r1/MrLegendsMiniGolf-r1.zip">⬇ Download free</a>
+        <a class="btn btn-ghost" href="#support">♥ Tip the studio</a>
+      </div>
+      <p class="fine">Free to play · about 86&nbsp;MB · Runs on Legends Pinball 4KP and HDP · <a href="https://github.com/jasontierney43/mr-legends-mini-golf/releases">All releases</a></p>
+    </div>
+    <div class="cab">
+      <div class="dmd"><img src="img/hole-in-one.webp" alt="Hole in one celebration on the cabinet's DMD screen"></div>
+      <span class="dmd-label">Real frame from the game's DMD screen</span>
+      <div class="ball" aria-hidden="true"></div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2>Everything in the <em>bag</em></h2>
+    <p class="sub">A full mini golf game made for the cabinet: the playfield, the DMD and the plunger all get used.</p>
+    <div class="features">
+      <div class="feat"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3v14"/><path d="M8 13l4 4 4-4"/><path d="M5 21h14"/></svg></div><h3>Plunger putting</h3><p>Pull back the plunger to set your power and let go to putt. Prefer buttons? Use the power meter with A or the forward nudge.</p></div>
+      <div class="feat"><div class="ico"><svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M3 20c0-3 2.5-5 5-5s5 2 5 5"/><path d="M11 20c0-3 2.5-5 5-5s5 2 5 5"/></svg></div><h3>1 to 4 players</h3><p>Take turns on the same cabinet. Fewest strokes wins.</p></div>
+      <div class="feat"><div class="ico"><svg viewBox="0 0 24 24"><path d="M5 21V4"/><path d="M5 4h11l-3 4 3 4H5"/></svg></div><h3>72 holes</h3><p>Four courses of 18 holes each. Play the front 9, the back 9 or the full 18.</p></div>
+      <div class="feat"><div class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg></div><h3>DMD celebrations</h3><p>Hole in one, eagle, birdie and par each get their own animated show on the DMD screen.</p></div>
+      <div class="feat"><div class="ico"><svg viewBox="0 0 24 24"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 6h3a3 3 0 0 1-3 4"/><path d="M7 6H4a3 3 0 0 0 3 4"/></svg></div><h3>Leaderboards</h3><p>Each course keeps its own leaderboard with your initials, saved to the USB stick.</p></div>
+      <div class="feat"><div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18c1.5 0 2-1 2-2s-1-1.5-1-2.5S14 15 15 15h2a4 4 0 0 0 4-4"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="15" cy="7.5" r="1"/></svg></div><h3>Pick an art style</h3><p>Change the look of each course for something new on replay. Same bounces, different look.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="stripes" id="courses">
+  <div class="wrap">
+    <h2>The <em>courses</em></h2>
+    <p class="sub">Bumpers, spinners, sand, water and rivers of lava, plus a themed backdrop for every course. Pictures are real holes drawn by the game.</p>
+    <div class="courses">
+      <article class="course">
+        <div class="shot"><img src="img/course-mrlegends.webp" alt="Hole 13 of Mr. Legends, as drawn by the game"></div>
+        <div class="body"><span class="meta">18 holes · Classic</span><h3>Mr. Legends</h3><p>18 holes of classic mini golf among the pine trees.</p></div>
+      </article>
+      <article class="course">
+        <div class="shot"><img src="img/course-cosmic.webp" alt="Hole 9 of Cosmic Golf, as drawn by the game"></div>
+        <div class="body"><span class="meta">18 holes · Space</span><h3>Cosmic Golf</h3><p>18 holes among the stars, with neon planets and UFOs overhead.</p></div>
+      </article>
+      <article class="course">
+        <div class="shot"><img src="img/course-watertown.webp" alt="Hole 10 of Water Town Resort, as drawn by the game"></div>
+        <div class="body"><span class="meta">18 holes · Resort</span><h3>Water Town Resort</h3><p>18 holes of bridges and ponds beside a palm-lined lagoon.</p></div>
+      </article>
+      <article class="course">
+        <div class="shot"><img src="img/course-magma.webp" alt="Hole 18 of Magma Mountain, as drawn by the game"></div>
+        <div class="body"><span class="meta">18 holes · Volcano</span><h3>Magma Mountain</h3><p>18 holes across rivers of lava under a red volcano sky. Hit the lava and it costs you a stroke.</p></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Every great putt gets a <em>show</em></h2>
+    <p class="sub">Real frames from the animated celebrations on the cabinet's DMD screen.</p>
+    <div class="strip">
+      <figure><img src="img/hole-in-one-bear.webp" alt="Hole in one celebration"></figure>
+      <figure><img src="img/eagle.webp" alt="Eagle celebration"></figure>
+      <figure><img src="img/birdie-beach.webp" alt="Birdie celebration on a beach"></figure>
+      <figure><img src="img/birdie-blossom.webp" alt="Birdie celebration with cherry blossoms"></figure>
+      <figure><img src="img/hole-in-one-castle.webp" alt="Hole in one at a castle at night"></figure>
+      <figure><img src="img/par-desert.webp" alt="Par in the desert"></figure>
+      <figure><img src="img/birdie-lighthouse.webp" alt="Birdie by a lighthouse at sunset"></figure>
+      <figure><img src="img/ghost.webp" alt="Friendly ghost at night"></figure>
+    </div>
+  </div>
+</section>
+
+<section class="install" id="install">
+  <div class="wrap">
+    <h2>Install in <em>4 steps</em></h2>
+    <p class="sub">All you need is a USB stick and a Windows PC. It takes about two minutes.</p>
+    <div class="steps">
+
+      <div class="step">
+        <div class="num">1</div>
+        <div><h3>Download the game</h3><p>Click the gold button. Your browser saves the zip file to your <b>Downloads</b> folder.</p></div>
+        <div class="dl-mock"><a class="btn btn-gold ring" href="https://github.com/jasontierney43/mr-legends-mini-golf/releases/download/r1/MrLegendsMiniGolf-r1.zip">⬇ Download free</a></div>
+      </div>
+
+      <div class="step">
+        <div class="num">2</div>
+        <div><h3>Right-click the zip → <kbd>Extract All…</kbd></h3><p>Plug your USB stick into the PC. Open your Downloads folder, right-click <b>MrLegendsMiniGolf-r1.zip</b> and choose <b>Extract All…</b></p></div>
+        <div>
+          <div class="win" style="position:relative;height:250px">
+            <div class="bar">📁 Downloads<span class="dots">— ▢ ✕</span></div>
+            <div class="pad">
+              <div class="crumb">This PC › Downloads</div>
+              <div class="file sel"><span class="zipico"></span>MrLegendsMiniGolf-r1.zip</div>
+              <div class="menu" style="left:70px;top:118px">
+                <div>Open</div><div class="hi ring">Extract All…</div><hr><div>Copy</div>
+              </div>
+            </div>
+          </div>
+          <div class="illus-cap">Illustration of the Windows screen</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">3</div>
+        <div><h3>Choose your USB stick, then <kbd>Extract</kbd></h3><p>Click <b>Browse…</b>, pick your USB stick (for example <b>USB Drive (E:)</b>), click <b>Select Folder</b>, then <b>Extract</b>. The game lands in the right place on the stick by itself, inside a folder called <b>external</b>.</p></div>
+        <div>
+          <div class="win dlg">
+            <div class="bar">Extract Compressed (Zipped) Folders<span class="dots">✕</span></div>
+            <div class="pad">
+              <h4>Select a Destination and Extract Files</h4>
+              <div>Files will be extracted to this folder:</div>
+              <div class="field"><span class="in">E:\</span><span class="wbtn ring">Browse…</span></div>
+              <div style="display:flex;justify-content:flex-end;gap:8px"><span class="wbtn pri ring">Extract</span><span class="wbtn">Cancel</span></div>
+            </div>
+          </div>
+          <div class="illus-cap">Illustration of the Windows screen. Your stick's letter may differ.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">4</div>
+        <div><h3>Eject, plug in, play</h3><p>Safely eject the stick, plug it into your cabinet and choose <b>Mr. Legends Mini Golf</b> from the game list. Your leaderboards save to the stick, so leave it in while you play.</p><p style="margin-top:10px">After you first play, you'll see 12 more folders on the stick named <b>mini-golf-app-…</b> (one for each course and length). That's where your scores are kept, so leave them there.</p></div>
+        <div>
+          <div class="win">
+            <div class="bar">💾 USB Drive (E:)<span class="dots">— ▢ ✕</span></div>
+            <div class="pad">
+              <div class="crumb">This PC › USB Drive (E:) › <b>external</b></div>
+              <div class="file sel"><span class="fold"></span>mini-golf-app</div>
+            </div>
+          </div>
+          <div class="illus-cap">What the stick looks like when it's done</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note"><b>On a Mac?</b> Save the zip, then double-click it to extract and copy the result to your USB stick. (Not tested by Mr. Legends. Windows is the supported method.)</div>
+  </div>
+</section>
+
+<section id="controls">
+  <div class="wrap">
+    <h2>How to <em>play</em></h2>
+    <p class="sub">Everything works from the cabinet itself, no arcade control panel needed.</p>
+    <table class="ctl">
+      <tr><td>D-pad or flipper buttons</td><td>Aim your putt</td></tr>
+      <tr><td>Plunger</td><td>Pull back to set power, release to putt</td></tr>
+      <tr><td>A button or forward nudge</td><td>Putt with the power meter instead of the plunger</td></tr>
+      <tr><td>D-pad + A</td><td>Move around the menus and select</td></tr>
+      <tr><td>BACK</td><td>Pause, or go back a screen</td></tr>
+    </table>
+  </div>
+</section>
+
+<section class="support" id="support">
+  <div class="wrap">
+    <div class="box">
+      <div>
+        <h2>Enjoying it? <em>Buy us a round.</em></h2>
+        <p class="sub" style="margin-bottom:24px">Mr. Legends Mini Golf is free. If it's earned a spot on your cabinet, a tip helps fund new courses and new games for the Legends.</p>
+        <a class="btn venmo" href="https://venmo.com/u/Mr_LegendsStudios">Tip with Venmo · @Mr_LegendsStudios</a>
+      </div>
+      <div class="qr"><img src="img/venmo-qr.png" alt="QR code for Venmo @Mr_LegendsStudios"><small>Scan with your phone</small></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap grid">
+    <img src="img/studio-sting.webp" alt="Mr. Legends Studios presents">
+    <div>
+      <p style="margin:0 0 8px"><b>Mr. Legends Mini Golf</b> © 2026 Mr. Legends Game Studios. Developed by Mr. Legends.</p>
+      <p style="margin:0 0 8px">Special thanks to <b>DANA</b> and the <b>Legends Pinball &amp; Arcade Community</b> for their support.</p>
+      <p style="margin:0">Made for AtGames Legends Pinball 4KP and HDP cabinets. </p>
+      <p style="margin:8px 0 0"><b>Found a bug?</b> Before you play again, open <b>external › mini-golf-app</b> on your USB stick and copy <b>mini-golf.log</b> (and <b>crash-report.log</b>, if there is one). The log starts fresh every time the game launches. Then <a href="https://github.com/jasontierney43/mr-legends-mini-golf/issues">report it here</a> and attach the file.</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
